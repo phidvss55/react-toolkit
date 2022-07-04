@@ -1,22 +1,24 @@
 {
-  "name": "server",
+  "name": "rest-api",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --trace-deprecation index.js"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "mongoose": "^6.3.4",
-    "nodemon": "^2.0.16"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "mongoose": "^6.4.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.7",
+    "path": "^0.12.7"
   }
 }

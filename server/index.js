@@ -1,31 +1,48 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import posts from "./routers/posts.js";
-import mongoose from "mongoose";
-
+const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 4000;
+const dotenv = require("dotenv");
+dotenv.config();
 
-const URI = "mongodb://localhost:27017/ninja_api";
+const helmet = require("helmet");
+const morgan = require("morgan");
+const multer = require("multer");
+const userRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
+const postRoute = require("./routes/posts");
+const path = require("path");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" })); // limit data size client submit to server
-app.use(cors());
+const connectToDB = require("./config/db");
+connectToDB();
 
-app.use("/posts", posts);
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-mongoose
-  .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+//middleware
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello World!</h1>");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name);
+  },
 });
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  try {
+    return res.status(200).json("File uploded successfully");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/posts", postRoute);
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
