@@ -59,8 +59,8 @@ router.put("/:id/like", async (req, res) => {
     res.status(500).json(err);
   }
 });
-//get a post
 
+//get a post
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -71,7 +71,6 @@ router.get("/:id", async (req, res) => {
 });
 
 //get timeline posts
-
 router.get("/timeline/:userId", async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
