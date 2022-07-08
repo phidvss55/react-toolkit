@@ -7,11 +7,18 @@ import { AuthContext } from "../../context/AuthContext";
 export default function Topbar() {
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const LOGO = process.env.REACT_APP_NAME;
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    window.location.reload();
+  }
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Lamasocial</span>
+          <span className="logo">{LOGO}</span>
         </Link>
       </div>
       <div className="topbarCenter">
@@ -27,6 +34,7 @@ export default function Topbar() {
         <div className="topbarLinks">
           <span className="topbarLink">Homepage</span>
           <span className="topbarLink">Timeline</span>
+          <span className="topbarLink" onClick={handleLogout}>Logout</span>
         </div>
         <div className="topbarIcons">
           <div className="topbarIconItem">
@@ -43,15 +51,20 @@ export default function Topbar() {
           </div>
         </div>
         <Link to={`/profile/${user.username}`}>
-          <img
-            src={
-              user.profilePicture
-                ? PF + user.profilePicture
-                : PF + "person/noAvatar.png"
-            }
-            alt=""
-            className="topbarImg"
-          />
+          <div style={{ display: 'flex'}}>
+            <div className="topbarLinks" style={{ margin: 'auto', color: 'white'}}>
+              <span className="topbarLink">Homepage</span>
+            </div>
+            <img
+              src={
+                user.profilePicture
+                  ? PF + user.profilePicture
+                  : PF + "person/noAvatar.png"
+              }
+              alt=""
+              className="topbarImg"
+            />
+          </div>
         </Link>
       </div>
     </div>
