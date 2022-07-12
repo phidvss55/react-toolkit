@@ -11,6 +11,7 @@ export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
+
   const [followed, setFollowed] = useState(
     currentUser.followings.includes(user?.id)
   );
@@ -18,8 +19,10 @@ export default function Rightbar({ user }) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get("/users/friends/" + user._id);
-        setFriends(friendList.data);
+        if (user) {
+          const friendList = await axios.get("/users/friends/" + user._id);
+          setFriends(friendList.data);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -57,8 +60,8 @@ export default function Rightbar({ user }) {
         <img className="rightbarAd" src="assets/ad.png" alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
+          {friends.map((u) => (
+            <Online key={u._id} user={u} />
           ))}
         </ul>
       </>
@@ -99,6 +102,7 @@ export default function Rightbar({ user }) {
         <div className="rightbarFollowings">
           {friends.map((friend) => (
             <Link
+              key={friend._id}
               to={"/profile/" + friend.username}
               style={{ textDecoration: "none" }}
             >
@@ -106,7 +110,7 @@ export default function Rightbar({ user }) {
                 <img
                   src={
                     friend.profilePicture
-                      ? PF + friend.profilePicture
+                      ? friend.profilePicture
                       : PF + "person/noAvatar.png"
                   }
                   alt=""

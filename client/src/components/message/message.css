@@ -8,6 +8,12 @@
     display: flex;
 }
 
+.messageTop span {
+    margin-top: 8px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
 .messageImg {
   width: 32px;
   height: 32px;

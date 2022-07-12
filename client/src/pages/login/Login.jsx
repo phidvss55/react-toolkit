@@ -46,7 +46,7 @@ export default function Login() {
             />
             <button className="loginButton" type="submit" disabled={isFetching}>
               {isFetching ? (
-                <CircularProgress color="white" size="20px" />
+                <CircularProgress color="primary" size="20px" />
               ) : (
                 "Log In"
               )}
@@ -54,7 +54,7 @@ export default function Login() {
             <span className="loginForgot">Forgot Password?</span>
             <button className="loginRegisterButton" onClick={(e) => history.push('/register')} >
               {isFetching ? (
-                <CircularProgress color="white" size="20px" />
+                <CircularProgress color="primary" size="20px" />
               ) : (
                 "Create a New Account"
               )}

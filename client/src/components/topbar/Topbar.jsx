@@ -1,16 +1,18 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
+  const history = useHistory();
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const LOGO = process.env.REACT_APP_NAME;
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    history.push("/login");
     window.location.reload();
   }
 
@@ -33,7 +35,7 @@ export default function Topbar() {
       <div className="topbarRight">
         <div className="topbarLinks">
           <span className="topbarLink">Homepage</span>
-          <span className="topbarLink">Timeline</span>
+          <span className="topbarLink" onClick={(e) => history.push('/messenger')}>Message</span>
           <span className="topbarLink" onClick={handleLogout}>Logout</span>
         </div>
         <div className="topbarIcons">
@@ -58,7 +60,7 @@ export default function Topbar() {
             <img
               src={
                 user.profilePicture
-                  ? PF + user.profilePicture
+                  ? user.profilePicture
                   : PF + "person/noAvatar.png"
               }
               alt=""
