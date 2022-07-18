@@ -1,19 +1,29 @@
-import {} from "react-redux";
-import { /* connect, */ useDispatch } from "react-redux";
-import * as actions from "./redux/actions";
-import HomePage from "./pages/HomePage";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SetAvatar from "./components/SetAvatar";
+import Chat from "./pages/Chat";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-function App() {
-  const dispatch = useDispatch();
-  dispatch(actions.getPosts.getPostsRequest());
-
+const App = () => {
   return (
-    <div className="App">
-      <HomePage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route exact path="/setAvatar" element={<SetAvatar />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
-
-// connect(mapState, mapDispatch)(App);

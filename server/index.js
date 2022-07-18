@@ -1,31 +1,53 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import posts from "./routers/posts.js";
-import mongoose from "mongoose";
-
+const express = require("express");
+const cors = require("cors");
+const authRoutes = require("./routes/auth");
+const messageRoutes = require("./routes/messages");
 const app = express();
-const PORT = process.env.PORT || 4000;
+const socket = require("socket.io");
+require("dotenv").config();
 
-const URI = "mongodb://localhost:27017/ninja_api";
+const connectToDB = require("./config/db");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" })); // limit data size client submit to server
 app.use(cors());
+app.use(express.json());
 
-app.use("/posts", posts);
+connectToDB();
 
-mongoose
-  .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello World!</h1>");
+const server = app.listen(process.env.PORT, () =>
+  console.log(`Server started on ${process.env.PORT}`)
+);
+
+// Socket connection
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+    method: ["GET", "POST"],
+  },
 });
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+
+    // socket.join(userId);
+    // socket.emit("welcome-msg", "Welcome to the chat!");
+    // socket.broadcast.to();
+  });
+
+  socket.on("send-msg", (data) => {
+    console.log("data", data);
+    console.log("online user", onlineUsers);
+    const sendUserSocket = onlineUsers.get(data.to);
+
+    console.log("sendUserSocket", sendUserSocket);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
+});
