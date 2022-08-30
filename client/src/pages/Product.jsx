@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/NavBar";
 import Newsletter from "../components/Newsletter";
 import { Container, Amount, Button, Wrapper, ImgContainer, Image, InfoContainer, Title, Desc, Price, FilterContainer, Filter, FilterTitle, FilterColor, FilterSize, FilterSizeOption, AddContainer, AmountContainer } from '../styled/Product'
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { publicRequest } from '../requestMethods'
 import { useDispatch } from "react-redux";
@@ -18,11 +18,15 @@ const Product = () => {
   const [color, setColor] = useState('')
   const [size, setSize] = useState('')
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getProduct = async() => {
       try {
         const res = await publicRequest.get(`/products/${id}`)
+        if (!res.data.data) {
+          navigate('/')
+        }
         setProduct(res.data.data)
       } catch (error) {
         console.log(error);
@@ -30,7 +34,7 @@ const Product = () => {
     }
 
     getProduct();
-  }, [id])
+  }, [id, navigate])
 
   const handleQuantity = (act) => {
     if (act === 'dec') {

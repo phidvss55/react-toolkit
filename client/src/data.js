@@ -26,40 +26,38 @@ export const categories = [
   {
     id: 1,
     img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "SHIRT STYLE!",
-    cat: "women",
+    title: "SPORTS STYLE!",
+    cat: "sports",
   },
   {
     id: 2,
     img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "LOUNGEWEAR LOVE",
-    cat: "coat",
+    title: "CLOTHES LOVE",
+    cat: "clothes",
   },
   {
     id: 3,
     img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    title: "LIGHT JACKETS",
-    cat: "jeans",
+    title: "T-SHIRT",
+    cat: "tshirt",
   },
 ];
 
-// https://i.ibb.co/S6qMxwr/jean.jpg
-
 export const popularProducts = [
   {
-    id: 1,
+    id: "630d7ec5dc1478505ad4915c",
     img: "https://d3o2e4jr3mxnm3.cloudfront.net/Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg.png",
   },
   {
-    id: 2,
+    id: "630d7fcddc1478505ad4915e",
     img: "https://cdn.shopify.com/s/files/1/0101/4832/products/Angela_Natural_Tee.png?v=1606780388",
   },
   {
-    id: 3,
+    id: "630d7feedc1478505ad49160",
     img: "https://www.prada.com/content/dam/pradanux_products/U/UCS/UCS319/1YOTF010O/UCS319_1YOT_F010O_S_182_SLF.png",
   },
   {
-    id: 4,
+    id: "630d8553f37c6c6876a7d5d7",
     img: "https://www.burdastyle.com/pub/media/catalog/product/cache/7bd3727382ce0a860b68816435d76e26/107/BUS-PAT-BURTE-1320516/1170x1470_BS_2016_05_132_front.png",
   },
   {

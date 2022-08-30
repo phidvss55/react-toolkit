@@ -2,12 +2,19 @@ import React from 'react';
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import { Container, Wrapper, Left, Language, SearchContainer, Center, Logo, Right, MenuItem, Input } from '../styled/Navbar'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { actions } from '../redux/userRedux'
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+
+  const signOut = (e) => {
+    e.preventDefault();
+    dispatch(actions.logout())
+  }
 
   return (
     <Container>
@@ -27,10 +34,14 @@ const Navbar = () => {
         <Right>
           {!user ? (
             <>
-              <MenuItem>REGISTER</MenuItem>
-              <MenuItem>SIGN IN</MenuItem>
+              <Link to="/register">
+                <MenuItem>REGISTER</MenuItem>
+              </Link>
+              <Link to="/login">
+                <MenuItem>SIGN IN</MenuItem>
+              </Link>
             </>
-          ) : <MenuItem>SIGN OUT</MenuItem>}
+          ) : <MenuItem onClick={signOut}>SIGN OUT</MenuItem>}
           <Link to="/cart">
             <MenuItem>
               <Badge badgeContent={cart.quantity} color="primary" overlap="rectangular">

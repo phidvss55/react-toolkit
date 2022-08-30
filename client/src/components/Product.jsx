@@ -62,9 +62,9 @@ const Icon = styled.div`
   }
 `;
 
-const Product = ({ item }) => {
+const Product = ({ item, onClick }) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Circle />
       <Image src={item.img} />
       <Info>
