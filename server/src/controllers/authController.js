@@ -27,8 +27,8 @@ const login = async (req, res) => {
       username: req.body.username,
     });
 
-    !user &&
-      res
+    if (!user)
+      return res
         .status(401)
         .json(responseJson(401, "Wrong credentials, Please check again", null));
 
@@ -40,8 +40,8 @@ const login = async (req, res) => {
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
     const inputPassword = req.body.password;
 
-    originalPassword != inputPassword &&
-      res.status(401).json("Wrong password, Please check again");
+    if (originalPassword != inputPassword)
+      return res.status(401).json("Wrong password, Please check again");
 
     const accessToken = jwt.sign(
       {

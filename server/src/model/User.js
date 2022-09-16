@@ -23,6 +23,12 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    img: {
+      type: String,
+    },
+    job: {
+      type: String,
+    },
   },
   {
     timestamps: true,

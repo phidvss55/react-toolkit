@@ -13,9 +13,12 @@ import {
   WorkOutline,
   Report,
 } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
+  const pathName = useLocation()
+  console.log('path name', pathName)
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -23,7 +26,7 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
+            <li className={`sidebarListItem ${pathName.pathname === '/' ? 'active' : ''}`}>
               <LineStyle className="sidebarIcon" />
               Home
             </li>
@@ -42,13 +45,13 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
             <Link to="/users" className="link">
-              <li className="sidebarListItem">
+              <li className={`sidebarListItem ${pathName.pathname === '/users' ? 'active' : ''}`}>
                 <PermIdentity className="sidebarIcon" />
                 Users
               </li>
             </Link>
             <Link to="/products" className="link">
-              <li className="sidebarListItem">
+            <li className={`sidebarListItem ${pathName.pathname === '/products' ? 'active' : ''}`}>
                 <Storefront className="sidebarIcon" />
                 Products
               </li>
