@@ -20,7 +20,7 @@ export const getProducts = async (dispatch) => {
   dispatch(productActions.getProductStart);
   try {
     const res = await publicRequest.get("/products");
-    dispatch(productActions.getProductSuccess(res.data));
+    dispatch(productActions.getProductSuccess(res.data?.data));
   } catch (err) {
     dispatch(productActions.getProductFailure());
   }

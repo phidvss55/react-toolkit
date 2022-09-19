@@ -1,52 +1,48 @@
 import "./productList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-// import { productRows } from "../../dummyData";
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../../redux/apiCall";
-import { userRequest } from "../../requestMethods";
+import React, { useEffect } from "react";
+import { getProducts, deleteProduct } from "../../redux/apiCall";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ProductList() {
-  const [data, setData] = useState([]);
   const isMounted = React.useRef(false)
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.products)
 
   useEffect(() => {
-    getProducts()
+    getProducts(dispatch)
     return () => { isMounted.current = true }
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = (id) => {
-    setData(data.filter((item) => item._id !== id));
+    deleteProduct(id, dispatch)
   };
 
   const columns = [
     { 
       field: "_id", 
       headerName: "ID", 
-      width: 90
+      width: 250
     },
     {
       field: "product",
       headerName: "Product",
-      width: 200,
+      width: 250,
       renderCell: (params) => {
         return (
           <div className="productListItem">
             <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.name}
+            {params.row.title}
           </div>
         );
       },
     },
     { 
-      field: "stock",
+      field: "inStock",
       headerName: "Stock",
-      width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
+      width: 150
     },
     {
       field: "price",
@@ -76,9 +72,10 @@ export default function ProductList() {
   return (
     <div className="productList">
       <DataGrid
-        rows={data}
+        rows={products}
         disableSelectionOnClick
         columns={columns}
+        getRowId={(row) => row._id}
         pageSize={8}
         checkboxSelection
       />

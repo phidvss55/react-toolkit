@@ -17,7 +17,6 @@ import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
   const pathName = useLocation()
-  console.log('path name', pathName)
 
   return (
     <div className="sidebar">
