@@ -2,16 +2,20 @@ import Hotel from '../models/Hotel.js';
 import { responseError } from '../utils/helper.js'
 
 export const createHotel = async(req, res,next) => {
-  if (!Object.keys(req.body).length) return res.status(500).json(responseError('Data is required'))
+  if (!Object.keys(req.body).length) {
+    return res.status(500).json(responseError('Data is required'))
+  }
+
   const newEntity = new Hotel(req.body)
   try {
     const hotel = await newEntity.save();
     res.status(200).json(hotel);
   } catch (error) {
-    next(err)
+    next(error)
   }
 }
 
+/* Update hotel */
 export const updateHotel = async(req, res) => {
   try {
     const updatedHotel = await Hotel.findByIdAndUpdate(
