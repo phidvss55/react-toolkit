@@ -1,0 +1,1 @@
+export const HotelType = ['hotel', 'resort', 'appartment', 'villa', 'cabins'];

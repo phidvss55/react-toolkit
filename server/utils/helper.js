@@ -10,8 +10,8 @@ export const createError = (status, message) => {
 export const responseError = (message) => {
   return {
     status: 500,
+    message: message,
     data: [], 
-    message: message
   }
 }
 
@@ -19,7 +19,7 @@ export const responseSuccess = (data, message) => {
   let dataArr = Array.isArray(data) ? data : [data]
   return {
     status: 200,
+    message: message,
     data: dataArr, 
-    message: message
   }
 }

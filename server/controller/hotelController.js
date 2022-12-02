@@ -1,9 +1,16 @@
 import Hotel from '../models/Hotel.js';
-import { responseError } from '../utils/helper.js'
+import { createError, responseError, responseSuccess } from '../utils/helper.js'
+import {HotelType} from '../constants/index.js';
 
 export const createHotel = async(req, res,next) => {
   if (!Object.keys(req.body).length) {
     return res.status(500).json(responseError('Data is required'))
+  }
+
+  let type = req.body.type;
+  if (!HotelType.includes(type)) {
+    next(createError(500, 'Type is invalid'));
+    return;
   }
 
   const newEntity = new Hotel(req.body)
@@ -48,14 +55,56 @@ export const getHotel = async (req, res, next) => {
 };
 
 export const getHotels = async (req, res, next) => {
-  const { min, max, ...others } = req.query;
+  const { min, max, limit, ...others } = req.query;
   try {
     const hotels = await Hotel.find({
       ...others,
-      cheapestPrice: { $gt: min | 1, $lt: max || 999 },
-    }).limit(req.query.limit);
-    res.status(200).json(hotels);
+      cheapestPrice: { $gt: min | 1, $lt: max || 10000000 },
+    }).limit(limit || undefined);
+
+    res.status(200).json(responseSuccess(hotels, 'Successful'));
   } catch (err) {
     next(err);
   }
 };
+
+export const countByCity = async(req, res, next) => {
+  let cities = req.query.cities;
+  if (!cities) {
+    next(createError(500, 'City not found'));
+    return;
+  }
+  cities = cities.split(',');
+  try {
+    const list = await Promise.all(
+      cities.map(city => {
+        return Hotel.countDocuments({ city: city })
+      })
+    )
+
+    let results = cities.reduce((obj, key, index) => ({ ...obj, [key]: list[index] }), {});
+    return res.status(200).json(results);
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const countByType = async(req, res, next) => {
+  try {
+    const list = await Promise.all(
+      HotelType.map(type => {
+        return Hotel.countDocuments({ type: type })
+      })
+    )
+
+    let results = HotelType.reduce((obj, key, index) => { 
+      let item = { type: key, count: list[index] }
+      obj.push(item)
+      return obj
+    }, []);
+    return res.status(200).json(results);
+  } catch (err) {
+    next(err)
+  }
+}
+
