@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../hook/http";
 import "./featuredProperties.css";
 
 const FeaturedProperties = () => {
+  const navigate = useNavigate();
   const { error, data, loading } = useFetch('/hotels?featured=true&limit=4')
   const hotels = data.data || []
 
@@ -9,12 +11,16 @@ const FeaturedProperties = () => {
     return 'Error'
   }
 
+  const navigateToItem = (item) => {
+    navigate(`/hotels/${item._id}`)
+  }
+
   return (
     <div className="fp">
       {loading ? ( 'Loading' ) : (
         <>
           {hotels.map((item) => (
-            <div className="fpItem" key={item._id}>
+            <div className="fpItem hand" key={item._id} onClick={() => navigateToItem(item)}>
               <img
                 src={item.photos[0]}
                 alt=""

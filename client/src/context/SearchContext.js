@@ -14,10 +14,14 @@ export const SearchContext = createContext(INITIAL_STATE)
 
 const searchReducer = (state, action) => {
   switch(action.type) {
-    case 'NEW_SEARCH': 
+    case 'NEW_SEARCH':
+      localStorage.setItem('search_filter', JSON.stringify(action.payload))
       return action.payload;
     case 'RESET_SEARCH': 
       return INITIAL_STATE;
+    case 'MERGE_SEARCH': 
+      let payload = JSON.parse(localStorage.getItem('search_filter'))
+      return payload;
     default: 
       return state;
   }

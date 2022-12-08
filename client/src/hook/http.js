@@ -5,12 +5,13 @@ const useFetch = (url) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const BASE_URL = 'http://localhost:4000/api' + url
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(BASE_URL);
         setData(res.data);
       } catch (e) {
         setError(e)
@@ -19,12 +20,12 @@ const useFetch = (url) => {
     }
 
     fetchData();
-  }, [url])
+  }, [BASE_URL])
 
   const refetch = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(url);
+      const res = await axios.get(BASE_URL);
       setData(res.data);
     } catch (e) {
       setError(e)

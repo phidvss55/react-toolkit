@@ -10,29 +10,43 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../../hook/http";
 import { SearchContext } from "../../context/SearchContext";
-import { MILLISECONDS_PER_DAY } from "../../constants";
+import { CONTEXT_TYPE, MILLISECONDS_PER_DAY } from "../../constants";
+import { AuthContext } from "../../context/AuthContext";
+import Reserve from "../../components/reserve/Reserve";
 
 const Hotel = () => {
   const location = useLocation();
   const path = location.pathname.split('/')[2]
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const { data, loading } = useFetch(`/hotels/find/${path}`)
+  const { dates, options, dispatch } = useContext(SearchContext);
 
-  const { dates } = useContext(SearchContext);
+  useEffect(() => {
+    if (!dates || !dates.length) {
+      dispatch({ type: CONTEXT_TYPE.MERGE_SEARCH })
+    }
+  }, [dates, dispatch]);
+
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const dayDiff = (date1, date2) => {
+    if (!date1 || !date2) return;
+    if (!(date1 instanceof Date)) date1 = new Date(date1)
+    if (!(date2 instanceof Date)) date2 = new Date(date2)
     const timeDiff = Math.abs(date2.getTime() - date1.getTime());
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY)
     return diffDays;
   }
 
-  console.log('dayDiff', dayDiff(dates[0]?.startDate, dates[1]?.endDate))
+  const days = dayDiff(dates[0]?.endDate, dates[0]?.startDate)
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -50,6 +64,13 @@ const Hotel = () => {
 
     setSlideNumber(newSlideNumber)
   };
+
+  const handleClick = () => {
+    if (!user) {
+      navigate('/login')
+    }
+    setOpenModal(true);
+  }
 
   return (
     <div>
@@ -123,23 +144,25 @@ const Hotel = () => {
                   </p>
                 </div>
                 <div className="hotelDetailsPrice">
-                  <h1>Perfect for a 9-night stay!</h1>
+                  <h1>Perfect for a {days}-night stay!</h1>
                   <span>
                     Located in the real heart of Krakow, this property has an
                     excellent location score of 9.8!
                   </span>
                   <h2>
-                    <b>$945</b> (9 nights)
+                    <b>${days * data.cheapestPrice * options.room}</b> ({days} nights)
                   </h2>
-                  <button>Reserve or Book Now!</button>
+                  <button onClick={handleClick}>Reserve or Book Now!</button>
                 </div>
               </div>
             </div>
+
             <MailList />
             <Footer />
           </div>
         </>
       )}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={path} ></Reserve>}
     </div>
   );
 };

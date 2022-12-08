@@ -16,10 +16,10 @@ export const responseError = (message) => {
 }
 
 export const responseSuccess = (data, message) => {
-  let dataArr = Array.isArray(data) ? data : [data]
+  // let dataArr = Array.isArray(data) ? data : [data]
   return {
     status: 200,
     message: message,
-    data: dataArr, 
+    data: data, 
   }
 }

@@ -1,5 +1,6 @@
 import Room from '../models/Room.js'
 import Hotel from '../models/Hotel.js'
+import { responseSuccess } from '../utils/helper.js';
 
 export const createRoom = async (req, res, next) => {
   const hotelId = req.params.hotelid;
@@ -41,7 +42,7 @@ export const updateRoomAvailability = async (req, res, next) => {
         },
       }
     );
-    res.status(200).json("Room status has been updated.");
+    res.status(200).json(responseSuccess([], "Room status has been updated."));
   } catch (err) {
     next(err);
   }

@@ -19,7 +19,7 @@ const List = () => {
   const [max, setMax] = useState(undefined);
   const [results, setResults] = useState([]);
 
-  const { data, loading, refetch } = useFetch(`/hotels?city=${destination}&min=${min || 0}$max=${max || 1000000}`)
+  const { data, loading, refetch } = useFetch(`/hotels?city=${destination}&min=${min || 0}&max=${max || 1000000}`)
   useEffect(() => {
     setResults(data?.data || [])
   }, [data])

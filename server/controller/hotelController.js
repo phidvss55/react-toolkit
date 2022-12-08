@@ -1,6 +1,7 @@
 import Hotel from '../models/Hotel.js';
 import { createError, responseError, responseSuccess } from '../utils/helper.js'
 import {HotelType} from '../constants/index.js';
+import Room from '../models/Room.js';
 
 export const createHotel = async(req, res,next) => {
   if (!Object.keys(req.body).length) {
@@ -62,7 +63,8 @@ export const getHotels = async (req, res, next) => {
       cheapestPrice: { $gt: min | 1, $lt: max || 10000000 },
     }).limit(limit || undefined);
 
-    res.status(200).json(responseSuccess(hotels, 'Successful'));
+    let results = responseSuccess(hotels, 'Successful');
+    return res.status(200).json(results);
   } catch (err) {
     next(err);
   }
@@ -108,3 +110,18 @@ export const countByType = async(req, res, next) => {
   }
 }
 
+export const getHotelRooms = async(req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    const list = await Promise.all(
+      hotel.rooms.map(room => {
+        return Room.findById(room)
+      })
+    );
+    
+    let results = responseSuccess(list, 'Get list successfully')
+    return res.status(200).json(results);
+  } catch (error) {
+    next(error)
+  }
+}
