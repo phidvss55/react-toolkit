@@ -37,7 +37,7 @@ export const noteLoader = async ({ params: { noteId } }) => {
       noteId,
     },
   });
-  return data;
+  return data ?? {};
 };
 
 export const addNewNote = async ({ params, request }) => {

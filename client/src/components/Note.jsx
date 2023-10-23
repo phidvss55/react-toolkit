@@ -14,7 +14,7 @@ export default function Note() {
   const { note } = useLoaderData();
   const submit = useSubmit();
   const location = useLocation();
-  const [rawHTML, setRawHTML] = useState(note.content);
+  const [rawHTML, setRawHTML] = useState(note?.content);
   const [editorState, setEditorState] = useState(() => {
     return EditorState.createEmpty();
   });
@@ -26,7 +26,7 @@ export default function Note() {
       blocksFromHTML.entityMap
     );
     setEditorState(EditorState.createWithContent(state));
-  }, [note.id]);
+  }, [note?.id]);
 
   useEffect(() => {
     debouncedMemorized(rawHTML, note, location.pathname);

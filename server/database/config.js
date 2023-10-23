@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 
 const connectToDatabase = async () => {
   try {
+    const DATABASE_URL = process.env.DATABASE_URI;
     mongoose.set("strictQuery", false);
-    await mongoose.connect("mongodb://localhost:27017/node_mongodb", {
+    await mongoose.connect(DATABASE_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

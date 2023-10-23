@@ -36,7 +36,7 @@ export default function NoteList() {
     if (folder?.notes?.[0]) {
       navigate(`note/${folder.notes[0].id}`);
     }
-  }, [noteId, folder.notes]);
+  }, [noteId, folder?.notes]);
 
   const handleAddNewNote = () => {
     submit(
@@ -81,7 +81,7 @@ export default function NoteList() {
             </Box>
           }
         >
-          {folder.notes.map(({ id, content, updatedAt }) => {
+          {folder?.notes?.map(({ id, content, updatedAt }) => {
             return (
               <Link
                 key={id}
