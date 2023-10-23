@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ContentState,
-  Editor,
-  EditorState,
   convertFromHTML,
   convertToRaw,
+  EditorState,
 } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import { useLoaderData, useSubmit, useLocation } from "react-router-dom";
 import { debounce } from "@mui/material";
-import { useLocation, useSubmit } from "react-router-dom";
 
 export default function Note() {
-  const note = {
-    id: 9999,
-    content: "<p>This is ntoe</p>",
-  };
+  const { note } = useLoaderData();
   const submit = useSubmit();
   const location = useLocation();
-  const [editorState, setEditorState] = useState(() => {
-    EditorState.createEmpty();
-  });
   const [rawHTML, setRawHTML] = useState(note.content);
+  const [editorState, setEditorState] = useState(() => {
+    return EditorState.createEmpty();
+  });
 
   useEffect(() => {
     const blocksFromHTML = convertFromHTML(note.content);
@@ -28,7 +25,6 @@ export default function Note() {
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
     );
-
     setEditorState(EditorState.createWithContent(state));
   }, [note.id]);
 

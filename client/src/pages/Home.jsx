@@ -7,7 +7,7 @@ import FolderList from "../components/FolderList";
 import UserMenu from "../components/UserMenu";
 
 export default function Home() {
-  // const { folders } = useLoaderData();
+  const { folders } = useLoaderData();
 
   return (
     <>
@@ -24,12 +24,7 @@ export default function Home() {
         sx={{ height: "50vh", boxShadow: "0 0 15px 0 rgb(193 193 193 / 60%)" }}
       >
         <Grid item xs={3} sx={{ height: "100%" }}>
-          <FolderList
-            folders={[
-              { id: "1", name: "Plan for tet 1" },
-              { id: "2", name: "Plan for tet 2" },
-            ]}
-          />
+          <FolderList folders={folders} />
         </Grid>
 
         <Grid item xs={9} sx={{ height: "100%" }}>

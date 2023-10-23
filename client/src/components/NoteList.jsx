@@ -23,12 +23,9 @@ import {
 export default function NoteList() {
   const { noteId, folderId } = useParams();
   const [activeNoteId, setActiveNoteId] = useState(noteId);
-  // const { folder } = useLoaderData();
-  const folder = {};
+  const { folder } = useLoaderData();
   const submit = useSubmit();
   const navigate = useNavigate();
-
-  // console.log("[NoteLIST]", { folder });
 
   // useEffect(() => {
   //   if (noteId) {

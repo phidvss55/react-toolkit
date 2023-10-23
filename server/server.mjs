@@ -6,41 +6,14 @@ import bodyParser from "body-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import fakeData from "./fakeData/index.js";
+import connectToDatabase from "./database/config.js";
+import "dotenv/config.js";
 
 const app = express();
 const httpServer = http.createServer(app);
 
-const typeDefs = `#graphql
-  type Folder {
-    id: String,
-    name: String,
-    createdAt: String,
-    author: Author
-  }
-
-  type Author {
-    id: String,
-    name: String
-  }
-
-  type Query {
-    folders: [Folder]
-  }
-`;
-const resolvers = {
-  Query: {
-    folders: () => {
-      return fakeData.folders;
-    },
-  },
-  Folder: {
-    author: (parent, args, context, info) => {
-      console.log(parent, args);
-      const authorId = parent.authorId;
-      return fakeData.authors.find((author) => author.id == authorId);
-    },
-  },
-};
+import { resolvers } from "./resolvers/index.js";
+import { typeDefs } from "./schemas/index.js";
 
 // schema
 // resolver
@@ -53,7 +26,9 @@ const server = new ApolloServer({
 await server.start();
 
 app.use(cors(), bodyParser.json(), expressMiddleware(server));
+connectToDatabase();
 
-await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+const PORT = process.env.PORT || 4000;
+await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
 
 console.log("Server is ready at http://localhost:4000");
