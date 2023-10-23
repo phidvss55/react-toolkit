@@ -20,6 +20,11 @@ export default defineConfig({
       "~bootstrap": "bootstrap",
     },
   },
+  build: {
+    rollupOptions: {
+      external: ["graphql"],
+    },
+  },
   define: {
     global: "window",
   },

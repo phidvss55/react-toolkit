@@ -26,19 +26,15 @@ export const resolvers = {
       }).sort({
         updatedAt: "desc",
       });
-      console.log({ folders, context });
       return folders;
     },
     folder: async (_, args) => {
       const folderId = args.folderId;
-      console.log({ folderId });
-      const foundFolder = await FolderModel.findById(folderId);
-      return foundFolder;
+      return await FolderModel.findById(folderId);
     },
-    note: async (parent, args) => {
+    note: async (_, args) => {
       const noteId = args.noteId;
-      const note = await NoteModel.findById(noteId);
-      return note;
+      return await NoteModel.findById(noteId);
     },
   },
   Folder: {
@@ -48,8 +44,7 @@ export const resolvers = {
         uid: authorId,
       });
     },
-    notes: async (parent, args) => {
-      console.log({ parent });
+    notes: async (parent, _) => {
       return await NoteModel.find({
         folderId: parent.id,
       }).sort({
@@ -58,19 +53,18 @@ export const resolvers = {
     },
   },
   Mutation: {
-    addNote: async (parent, args) => {
+    addNote: async (_, args) => {
       const newNote = new NoteModel(args);
       await newNote.save();
       return newNote;
     },
-    updateNote: async (parent, args) => {
+    updateNote: async (_, args) => {
       const noteId = args.id;
       const note = await NoteModel.findByIdAndUpdate(noteId, args);
       return note;
     },
-    addFolder: async (parent, args, context) => {
+    addFolder: async (_, args, context) => {
       const newFolder = new FolderModel({ ...args, authorId: context.uid });
-      console.log({ newFolder });
       pubsub.publish("FOLDER_CREATED", {
         folderCreated: {
           message: "A new folder created",
@@ -79,7 +73,7 @@ export const resolvers = {
       await newFolder.save();
       return newFolder;
     },
-    register: async (parent, args) => {
+    register: async (_, args) => {
       const foundUser = await AuthorModel.findOne({ uid: args.uid });
 
       if (!foundUser) {
@@ -90,7 +84,7 @@ export const resolvers = {
 
       return foundUser;
     },
-    pushNotification: async (parent, args) => {
+    pushNotification: async (_, args) => {
       const newNotification = new NotificationModel(args);
 
       pubsub.publish("PUSH_NOTIFICATION", {

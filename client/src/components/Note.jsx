@@ -57,6 +57,10 @@ export default function Note() {
 
   return (
     <Editor
+      editorStyle={{
+        marginLeft: "12px",
+      }}
+      editorClassName="h-2 custom-class"
       editorState={editorState}
       onEditorStateChange={handleOnChange}
       placeholder="Write something!"

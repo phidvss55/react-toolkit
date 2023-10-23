@@ -27,16 +27,16 @@ export default function NoteList() {
   const submit = useSubmit();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (noteId) {
-  //     setActiveNoteId(noteId);
-  //     return;
-  //   }
+  useEffect(() => {
+    if (noteId) {
+      setActiveNoteId(noteId);
+      return;
+    }
 
-  //   if (folder?.notes?.[0]) {
-  //     navigate(`note/${folder.notes[0].id}`);
-  //   }
-  // }, [noteId, folder.notes]);
+    if (folder?.notes?.[0]) {
+      navigate(`note/${folder.notes[0].id}`);
+    }
+  }, [noteId, folder.notes]);
 
   const handleAddNewNote = () => {
     submit(
@@ -75,13 +75,13 @@ export default function NoteList() {
               <Typography sx={{ fontWeight: "bold" }}>Notes</Typography>
               <Tooltip title="Add Note" onClick={handleAddNewNote}>
                 <IconButton size="small">
-                  {/* <NoteAddOutlined /> */}
+                  <NoteAddOutlined />
                 </IconButton>
               </Tooltip>
             </Box>
           }
         >
-          {folder?.notes?.map(({ id, content, updatedAt }) => {
+          {folder.notes.map(({ id, content, updatedAt }) => {
             return (
               <Link
                 key={id}
@@ -115,7 +115,6 @@ export default function NoteList() {
           })}
         </List>
       </Grid>
-
       <Grid item xs={8}>
         <Outlet />
       </Grid>
